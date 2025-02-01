@@ -1,4 +1,5 @@
 ﻿using System.Data.Common;
+using System.Drawing;
 using Battleships.Entities;
 using Battleships.Helpers;
 
@@ -7,12 +8,12 @@ namespace Battleships.Services
     public static class GameService
     {
         public static void PlayGame(
-            char[,] grid, 
-            List<Ship> ships, 
-            int gridRowCount, 
+            char[,] grid,
+            List<Ship> ships,
+            int gridRowCount,
             int gridColCount)
         {
-            if(!IsGridValid(grid, gridRowCount, gridColCount))
+            if (!IsGridValid(grid, gridRowCount, gridColCount))
             {
                 Console.Write(UserMessages.Error);
                 return;
@@ -30,13 +31,13 @@ namespace Battleships.Services
 
                 string? userInput = Console.ReadLine();
 
-                if (string.IsNullOrWhiteSpace(userInput)) {
+                if (string.IsNullOrWhiteSpace(userInput))
+                {
                     Console.WriteLine(UserMessages.InvalidInput);
                     continue;
                 }
 
-                string input = userInput.ToUpper();
-                (bool inputValid, int column, int row) = CheckInputValidAndGetColumnAndRow(input, gridRowCount, gridColCount);
+                (bool inputValid, int row, int column) = CheckInputValidAndGetColumnAndRow(userInput, gridRowCount, gridColCount);
 
                 if (!inputValid)
                 {
@@ -44,14 +45,14 @@ namespace Battleships.Services
                     continue;
                 }
 
-                if (IsInputRepeatValue(grid,row, column))
+                if (IsInputRepeatValue(grid, row, column))
                 {
                     Console.WriteLine(UserMessages.AlreadyFiredAtPosition);
                     continue;
                 }
 
                 bool hit = CheckInputHitShipAndUpdateGrid(grid, ships, row, column);
-               
+
                 if (!hit)
                 {
                     grid[row, column] = GridChars.MISS_VALUE;
@@ -62,11 +63,18 @@ namespace Battleships.Services
             Console.WriteLine(UserMessages.GameOver);
         }
 
-        public static (bool, int, int) CheckInputValidAndGetColumnAndRow(
+        public static (bool valid, int row, int col) CheckInputValidAndGetColumnAndRow(
             string input,
             int gridRowCount,
             int gridColCount)
         {
+            if (string.IsNullOrEmpty(input))
+            {
+                return (false, 0, 0);
+            }
+
+            input = input.ToUpper();
+
             if (input.Length < 2 || input.Length > 3)
             {
                 return (false, 0, 0);
@@ -91,12 +99,12 @@ namespace Battleships.Services
             // index is 0 based so move column value down one from human 1 based input
             column -= 1;
 
-            if ( column < 0 || column > gridColCount)
+            if (column < 0 || column > gridColCount)
             {
                 return (false, 0, 0);
             }
 
-            return (true, column, row);
+            return (true, row, column);
         }
 
         private static bool IsInputRepeatValue(
@@ -113,9 +121,9 @@ namespace Battleships.Services
         }
 
         private static bool CheckInputHitShipAndUpdateGrid(
-            char[,] grid, 
+            char[,] grid,
             List<Ship> ships,
-            int row, 
+            int row,
             int column)
         {
             foreach (var ship in ships)
@@ -137,11 +145,11 @@ namespace Battleships.Services
         }
 
         private static bool IsGridValid(
-            char[,] grid, 
-            int gridRowCount, 
+            char[,] grid,
+            int gridRowCount,
             int gridColCount)
         {
-            if(grid == null || gridRowCount <= 0 || gridColCount <= 0)
+            if (grid == null || gridRowCount <= 0 || gridColCount <= 0)
             {
                 return false;
             }
