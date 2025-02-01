@@ -1,6 +1,4 @@
-﻿using System.Data.Common;
-using System.Drawing;
-using Battleships.Entities;
+﻿using Battleships.Entities;
 using Battleships.Helpers;
 
 namespace Battleships.Services
