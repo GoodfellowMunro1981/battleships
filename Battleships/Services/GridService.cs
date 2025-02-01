@@ -5,22 +5,26 @@ namespace Battleships.Services
 {
     public static class GridService
     {
-        public static void InitializeGrid(
-            char[,] grid,
-            int gridWith,
+        public static char[,] InitializeGrid(
+            int gridWidth,
             int gridHeight)
         {
-            for (int colIndex = 0; colIndex < gridWith; colIndex++)
+            char[,] grid = new char[gridWidth, gridHeight];
+
+            for (int colIndex = 0; colIndex < gridWidth; colIndex++)
             {
                 for (int rowIndex = 0; rowIndex < gridHeight; rowIndex++)
                 {
                     grid[colIndex, rowIndex] = GridChars.DEFAULT_GRID_VALUE;
                 }
             }
+
+            return grid;
         }
 
-        public static void PlaceShips(char[,] grid, List<Ship> ships)
+        public static List<Ship> PlaceShips(char[,] grid)
         {
+            List<Ship> ships = [];
             AddBattleship(ships); // Battleship
             AddDestroyer(ships); // Destroyer 1
             AddDestroyer(ships); // Destroyer 2
@@ -44,6 +48,8 @@ namespace Battleships.Services
                     }
                 }
             }
+
+            return ships;
         }
 
         private static void AddBattleship(List<Ship> ships)

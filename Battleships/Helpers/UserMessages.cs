@@ -2,6 +2,8 @@
 {
     public static class UserMessages
     {
+        public const string Error = "An error occured please restart application.";
+
         public const string InitialInstructions = "Enter target (e.g., A5): ";
 
         public const string InvalidInput = "Invalid input. Try again.";

@@ -5,13 +5,25 @@ namespace Battleships.Services
 {
     public static class GameService
     {
-        public static void PlayGame(char[,] grid, List<Ship> ships)
+        public static void PlayGame(char[,] grid, List<Ship> ships, int gridWidth, int gridHeight)
         {
+            if(!IsGridValid(grid, gridWidth, gridHeight))
+            {
+                Console.Write(UserMessages.Error);
+                return;
+            }
+
+            if (!IsShipsValid(ships))
+            {
+                Console.Write(UserMessages.Error);
+                return;
+            }
+
             while (ships.Exists(ship => !ship.IsSunk()))
             {
                 Console.Write(UserMessages.InitialInstructions);
 
-                string userInput = Console.ReadLine();
+                string? userInput = Console.ReadLine();
 
                 if (string.IsNullOrWhiteSpace(userInput)) {
                     Console.WriteLine(UserMessages.InvalidInput);
@@ -61,6 +73,26 @@ namespace Battleships.Services
             }
 
             Console.WriteLine(UserMessages.GameOver);
+        }
+
+        private static bool IsGridValid(char[,] grid, int gridWidth, int gridHeight)
+        {
+            if (grid != null && (grid.GetLength(0) == gridWidth || grid.GetLength(1) == gridHeight))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private static bool IsShipsValid(List<Ship> ships)
+        {
+            if (ships != null && ships.Count != 0)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }

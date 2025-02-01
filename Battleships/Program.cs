@@ -1,4 +1,5 @@
 ﻿using Battleships.Entities;
+using Battleships.Helpers;
 using Battleships.Services;
 
 class BattleshipsGame
@@ -8,11 +9,17 @@ class BattleshipsGame
 
     static void Main()
     {
-        char[,] grid = new char[gridWidth, gridHeight];
-        List<Ship> ships = [];
+        try
+        {
+            char[,] grid = GridService.InitializeGrid(gridWidth, gridHeight);
+            List<Ship> ships = GridService.PlaceShips(grid);
+            GameService.PlayGame(grid, ships, gridWidth, gridHeight);
+        }
+        catch (Exception ex)
+        {
+            //TODO ex should be logged in log file
 
-        GridService.InitializeGrid(grid, gridWidth, gridHeight);
-        GridService.PlaceShips(grid, ships);
-        GameService.PlayGame(grid, ships);
+            Console.Write(UserMessages.Error);
+        }
     }
 }
