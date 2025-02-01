@@ -62,7 +62,7 @@ namespace Battleships.Services
             Console.WriteLine(UserMessages.GameOver);
         }
 
-        private static (bool, int, int) CheckInputValidAndGetColumnAndRow(
+        public static (bool, int, int) CheckInputValidAndGetColumnAndRow(
             string input,
             int gridRowCount,
             int gridColCount)
