@@ -6,14 +6,14 @@ namespace Battleships.Services
     public static class GridService
     {
         public static char[,] InitializeGrid(
-            int gridWidth,
-            int gridHeight)
+            int gridRowCount,
+            int gridColCount)
         {
-            char[,] grid = new char[gridWidth, gridHeight];
+            char[,] grid = new char[gridRowCount, gridColCount];
 
-            for (int colIndex = 0; colIndex < gridWidth; colIndex++)
+            for (int colIndex = 0; colIndex < gridRowCount; colIndex++)
             {
-                for (int rowIndex = 0; rowIndex < gridHeight; rowIndex++)
+                for (int rowIndex = 0; rowIndex < gridColCount; rowIndex++)
                 {
                     grid[colIndex, rowIndex] = GridChars.DEFAULT_GRID_VALUE;
                 }
@@ -22,7 +22,10 @@ namespace Battleships.Services
             return grid;
         }
 
-        public static List<Ship> PlaceShips(char[,] grid)
+        public static List<Ship> PlaceShips(
+            char[,] grid,
+            int gridRowCount,
+            int gridColCount)
         {
             List<Ship> ships = [];
             AddBattleship(ships); // Battleship
@@ -37,8 +40,8 @@ namespace Battleships.Services
 
                 while (!placed)
                 {
-                    int row = rand.Next(10);
-                    int col = rand.Next(10);
+                    int row = rand.Next(gridRowCount);
+                    int col = rand.Next(gridColCount);
                     bool horizontal = rand.Next(2) == 0;
 
                     if (CanPlaceShip(grid, row, col, ship.Size, horizontal))

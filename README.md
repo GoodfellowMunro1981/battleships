@@ -56,9 +56,6 @@ Entities
 Service/Logic
 	- actions to play game
 	
-Tests
-	- unit tests for Logic
-	
 Helpers
 	- constant values
 
@@ -69,3 +66,10 @@ Ensure code allows easier configuraiton chanages
 - messages to user
 
 
+## Testing/ Unit Tests
+
+Setup tests as required/appropiate
+
+Tests
+	- unit tests for Logic
+	
