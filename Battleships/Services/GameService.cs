@@ -36,17 +36,13 @@ namespace Battleships.Services
                 }
 
                 string input = userInput.ToUpper();
-                (bool inputValid, int column) = CheckInputValidAndGetColumnChar(input);
+                (bool inputValid, int column, int row) = CheckInputValidAndGetColumnAndRow(input, gridRowCount, gridColCount);
 
                 if (!inputValid)
                 {
                     Console.WriteLine(UserMessages.InvalidInput);
                     continue;
                 }
-
-                // TODO improve this
-                int row = input[0] - 'A';
-                column -= 1;
 
                 if (IsInputRepeatValue(grid,row, column))
                 {
@@ -66,15 +62,41 @@ namespace Battleships.Services
             Console.WriteLine(UserMessages.GameOver);
         }
 
-        private static (bool, int) CheckInputValidAndGetColumnChar(string input)
+        private static (bool, int, int) CheckInputValidAndGetColumnAndRow(
+            string input,
+            int gridRowCount,
+            int gridColCount)
         {
-            // TODO improve this
-            if (input.Length < 2 || input.Length > 3 || input[0] < 'A' || input[0] > 'J' || !int.TryParse(input.Substring(1), out int column) || column < 1 || column > 10)
+            if (input.Length < 2 || input.Length > 3)
             {
-                return (false, 0);
+                return (false, 0, 0);
             }
 
-            return (true, column);
+            char rowValue = input[0];
+            char columnValue = input[1];
+
+            int intValueA = 65; // Represents 'A' in ASCII
+            int row = rowValue - intValueA;
+
+            if (row < 0 || row > gridRowCount)
+            {
+                return (false, 0, 0);
+            }
+
+            if (!int.TryParse(columnValue.ToString(), out int column))
+            {
+                return (false, 0, 0);
+            }
+
+            // index is 0 based so move column value down one from human 1 based input
+            column -= 1;
+
+            if ( column < 0 || column > gridColCount)
+            {
+                return (false, 0, 0);
+            }
+
+            return (true, column, row);
         }
 
         private static bool IsInputRepeatValue(

@@ -9,21 +9,23 @@ You should create a console application to allow a single human player to play a
 The program should create a 10x10 grid, and place a number of ships on the grid at
 
 random with the following sizes:
-•	1x Battleship (5 squares)
-•	2x Destroyers (4 squares)
+
+- 1x Battleship (5 squares)
+- 2x Destroyers (4 squares)
 
 The console application should accept input from the user in the format “A5” to signify a square to target, and feedback to the user whether the shot was success, and additionally report on the sinking of any vessels.
 
 
-## step 1
+## Step 1
 
-enter prompt to ChatGPT to generate simple code from Requirements as existing non custom logic required
+enter prompt to ChatGPT to generate simple code from Requirements as existing non custom logic required for application
 
-setup a new new c# Console App, paste code from ChatGPT 
+setup a new C# NET 8.0 Console App, paste code from ChatGPT 
 
-overview of console app to find any basic potential issues
+overview of codebase in console app to find any basic potential issues
 
-## basic smoke testing
+
+## Basic Manual Smoke-Testing of code/application
 
 ensure core functionality works as expected with some basic manual testing
 
@@ -40,12 +42,12 @@ ensure core functionality works as expected with some basic manual testing
 6) continue testing till a ship is found and sunk to ensure message is correct
 
 
-## Git Repo setup
+## Git Repo Setup
 
 setup repo on Github and commit/push changes for basic game so changes can commit history can be viewed
 
 
-## Code improvements/refactor 
+## Code Improvements/Refactor 
 
 split code into appropiate seperations
 
