@@ -1,4 +1,5 @@
 ﻿using Battleships.Entities;
+using Battleships.Enums;
 using Battleships.Helpers;
 
 namespace Battleships.Services
@@ -27,10 +28,10 @@ namespace Battleships.Services
             int gridRowCount,
             int gridColCount)
         {
-            List<Ship> ships = [];
-            AddBattleship(ships); // Battleship
-            AddDestroyer(ships); // Destroyer 1
-            AddDestroyer(ships); // Destroyer 2
+            List<Ship> ships = [
+                new Ship(ShipType.Battleship),
+                new Ship(ShipType.Destroyer),
+                new Ship(ShipType.Destroyer)];
 
             Random rand = new();
 
@@ -55,16 +56,6 @@ namespace Battleships.Services
             return ships;
         }
 
-        private static void AddBattleship(List<Ship> ships)
-        {
-            ships.Add(new Ship(5));
-        }
-
-        private static void AddDestroyer(List<Ship> ships)
-        {
-            ships.Add(new Ship(4));
-        }
-
         private static bool CanPlaceShip(char[,] grid, int row, int col, int size, bool horizontal)
         {
             // TODO improve this check
@@ -85,7 +76,7 @@ namespace Battleships.Services
             return true;
         }
 
-        private static void PlaceShip(char[,] grid, int row, int col, int size, bool horizontal, Ship ship)
+        public static void PlaceShip(char[,] grid, int row, int col, int size, bool horizontal, Ship ship)
         {
             for (int i = 0; i < size; i++)
             {

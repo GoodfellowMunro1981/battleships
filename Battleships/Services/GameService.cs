@@ -1,4 +1,5 @@
 ﻿using Battleships.Entities;
+using Battleships.Enums;
 using Battleships.Helpers;
 
 namespace Battleships.Services
@@ -35,47 +36,58 @@ namespace Battleships.Services
                     continue;
                 }
 
-                (bool inputValid, int row, int column) = CheckInputValidAndGetColumnAndRow(userInput, gridRowCount, gridColCount);
-
-                if (!inputValid)
-                {
-                    Console.WriteLine(UserMessages.InvalidInput);
-                    continue;
-                }
-
-                if (IsInputRepeatValue(grid, row, column))
-                {
-                    Console.WriteLine(UserMessages.AlreadyFiredAtPosition);
-                    continue;
-                }
-
-                bool hit = CheckInputHitShipAndUpdateGrid(grid, ships, row, column);
-
-                if (!hit)
-                {
-                    grid[row, column] = GridChars.MISS_VALUE;
-                    Console.WriteLine(UserMessages.Miss);
-                }
+                ProcessInput(grid, ships, gridRowCount, gridColCount, userInput);
             }
 
             Console.WriteLine(UserMessages.GameOver);
         }
 
-        public static (bool valid, int row, int col) CheckInputValidAndGetColumnAndRow(
+        public static EventResult ProcessInput(
+            char[,] grid,
+            List<Ship> ships,
+            int gridRowCount,
+            int gridColCount,
+            string userInput)
+        {
+            UserSelectedItem userSelectedItem = CheckInputValidAndGetColumnAndRow(userInput, gridRowCount, gridColCount);
+
+            if (!userSelectedItem.InputValid)
+            {
+                Console.WriteLine(UserMessages.InvalidInput);
+                return EventResult.Invalid;
+            }
+
+            if (IsInputRepeatValue(grid, userSelectedItem.Row, userSelectedItem.Column))
+            {
+                Console.WriteLine(UserMessages.AlreadyFiredAtPosition);
+                return EventResult.RepeatInput;
+            }
+
+            return CheckInputHitShipAndUpdateGrid(grid, ships, userSelectedItem.Row, userSelectedItem.Column);
+        }
+
+        public static UserSelectedItem CheckInputValidAndGetColumnAndRow(
             string input,
             int gridRowCount,
             int gridColCount)
         {
+            UserSelectedItem invalidResult = new()
+            {
+                InputValid = false,
+                Row = 0,
+                Column = 0
+            };
+
             if (string.IsNullOrEmpty(input))
             {
-                return (false, 0, 0);
+                return invalidResult;
             }
 
             input = input.ToUpper();
 
             if (input.Length < 2 || input.Length > 3)
             {
-                return (false, 0, 0);
+                return invalidResult;
             }
 
             char rowValue = input[0];
@@ -86,12 +98,12 @@ namespace Battleships.Services
 
             if (row < 0 || row > gridRowCount)
             {
-                return (false, 0, 0);
+                return invalidResult;
             }
 
             if (!int.TryParse(columnValue.ToString(), out int column))
             {
-                return (false, 0, 0);
+                return invalidResult;
             }
 
             // index is 0 based so move column value down one from human 1 based input
@@ -99,10 +111,15 @@ namespace Battleships.Services
 
             if (column < 0 || column > gridColCount)
             {
-                return (false, 0, 0);
+                return invalidResult;
             }
 
-            return (true, row, column);
+            return new UserSelectedItem()
+            {
+                InputValid = true,
+                Row = row,
+                Column = column
+            };
         }
 
         private static bool IsInputRepeatValue(
@@ -118,7 +135,7 @@ namespace Battleships.Services
             return false;
         }
 
-        private static bool CheckInputHitShipAndUpdateGrid(
+        private static EventResult CheckInputHitShipAndUpdateGrid(
             char[,] grid,
             List<Ship> ships,
             int row,
@@ -134,12 +151,16 @@ namespace Battleships.Services
                     if (ship.IsSunk())
                     {
                         Console.WriteLine(UserMessages.ShipSunk);
+                        return EventResult.Sunk;
                     }
-                    return true;
+
+                    return EventResult.Hit;
                 }
             }
 
-            return false;
+            grid[row, column] = GridChars.MISS_VALUE;
+            Console.WriteLine(UserMessages.Miss);
+            return EventResult.Miss;
         }
 
         private static bool IsGridValid(

@@ -1,4 +1,6 @@
-﻿namespace Battleships.Entities
+﻿using Battleships.Enums;
+
+namespace Battleships.Entities
 {
     public class Ship
     {
@@ -6,9 +8,9 @@
 
         public List<(int, int)> Positions { get; }
 
-        public Ship(int size)
+        public Ship(ShipType shipType)
         {
-            Size = size;
+            Size = (int)shipType;
             Positions = [];
         }
 
