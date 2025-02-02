@@ -23,16 +23,25 @@ namespace Battleships.Services
             return grid;
         }
 
+        public static List<Ship> AddShips(
+            IEnumerable<ShipType> shipTypes)
+        {
+            List<Ship> ships = [];
+
+            foreach (ShipType shipType in shipTypes)
+            {
+                ships.Add(new Ship(shipType));
+            }
+
+            return ships;
+        }
+
         public static List<Ship> PlaceShips(
             char[,] grid,
+            List<Ship> ships,
             int gridRowCount,
             int gridColCount)
         {
-            List<Ship> ships = [
-                new Ship(ShipType.Battleship),
-                new Ship(ShipType.Destroyer),
-                new Ship(ShipType.Destroyer)];
-
             Random rand = new();
 
             foreach (var ship in ships)
@@ -56,27 +65,13 @@ namespace Battleships.Services
             return ships;
         }
 
-        private static bool CanPlaceShip(char[,] grid, int row, int col, int size, bool horizontal)
-        {
-            // TODO improve this check
-            if ((horizontal && (col + size > 10)) || (!horizontal && (row + size > 10)))
-            {
-                return false;
-            }
-
-            for (int i = 0; i < size; i++)
-            {
-                // TODO improve this check
-                if ((horizontal && grid[row, col + i] != GridChars.DEFAULT_GRID_VALUE) || (!horizontal && grid[row + i, col] != GridChars.DEFAULT_GRID_VALUE))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        public static void PlaceShip(char[,] grid, int row, int col, int size, bool horizontal, Ship ship)
+        public static void PlaceShip(
+            char[,] grid, 
+            int row, 
+            int col, 
+            int size, 
+            bool horizontal,
+            Ship ship)
         {
             for (int i = 0; i < size; i++)
             {
@@ -90,6 +85,39 @@ namespace Battleships.Services
                 grid[row + i, col] = GridChars.SHIP_GRID_VALUE;
                 ship.Positions.Add((row + i, col));
             }
+        }
+
+        private static bool CanPlaceShip(
+            char[,] grid,
+            int row,
+            int col,
+            int size,
+            bool horizontal)
+        {
+            if (horizontal && (col + size) > 10)
+            {
+                return false;
+            }
+
+            if (!horizontal && (row + size) > 10)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < size; i++)
+            {
+                if (horizontal && grid[row, col + i] != GridChars.DEFAULT_GRID_VALUE)
+                {
+                    return false;
+                }
+
+                if (!horizontal && grid[row + i, col] != GridChars.DEFAULT_GRID_VALUE)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

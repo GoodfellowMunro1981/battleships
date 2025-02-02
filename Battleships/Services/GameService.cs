@@ -36,7 +36,27 @@ namespace Battleships.Services
                     continue;
                 }
 
-                ProcessInput(grid, ships, gridRowCount, gridColCount, userInput);
+                var result = ProcessInput(grid, ships, gridRowCount, gridColCount, userInput);
+
+                switch (result)
+                {
+                    case EventResult.Invalid:
+                        Console.WriteLine(UserMessages.InvalidInput);
+                        break;
+                    case EventResult.RepeatInput:
+                        Console.WriteLine(UserMessages.AlreadyFiredAtPosition);
+                        break;
+                    case EventResult.Miss:
+                        Console.WriteLine(UserMessages.Miss);
+                        break;
+                    case EventResult.Hit:
+                        Console.WriteLine(UserMessages.Hit);
+                        break;
+                    case EventResult.HitAndSunk:
+                        Console.WriteLine(UserMessages.ShipSunk);
+                        break;
+
+                }
             }
 
             Console.WriteLine(UserMessages.GameOver);
@@ -53,13 +73,11 @@ namespace Battleships.Services
 
             if (!userSelectedItem.InputValid)
             {
-                Console.WriteLine(UserMessages.InvalidInput);
                 return EventResult.Invalid;
             }
 
             if (IsInputRepeatValue(grid, userSelectedItem.Row, userSelectedItem.Column))
             {
-                Console.WriteLine(UserMessages.AlreadyFiredAtPosition);
                 return EventResult.RepeatInput;
             }
 
@@ -148,11 +166,9 @@ namespace Battleships.Services
                 if (ship.Hit(row, column))
                 {
                     grid[row, column] = GridChars.SHIP_HIT_VALUE;
-                    Console.WriteLine(UserMessages.Hit);
 
                     if (ship.IsSunk())
                     {
-                        Console.WriteLine(UserMessages.ShipSunk);
                         return EventResult.HitAndSunk;
                     }
 
@@ -161,7 +177,6 @@ namespace Battleships.Services
             }
 
             grid[row, column] = GridChars.MISS_VALUE;
-            Console.WriteLine(UserMessages.Miss);
             return EventResult.Miss;
         }
 
@@ -183,7 +198,8 @@ namespace Battleships.Services
             return false;
         }
 
-        private static bool IsShipsValid(List<Ship> ships)
+        private static bool IsShipsValid(
+            List<Ship> ships)
         {
             if (ships != null && ships.Count != 0)
             {

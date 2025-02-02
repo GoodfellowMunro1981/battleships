@@ -1,17 +1,25 @@
 ﻿using Battleships.Enums;
+using Battleships.Helpers;
 
 namespace Battleships.Entities
 {
     public class Ship
     {
-        public int Size { get; }
+        public int Size { get; } = 0;
 
-        public List<(int, int)> Positions { get; }
+        public List<(int, int)> Positions { get; } = [];
+
+        public ShipType ShipType { get; }
 
         public Ship(ShipType shipType)
         {
-            Size = (int)shipType;
-            Positions = [];
+            if (!ShipSettings.ShipSizes.TryGetValue(shipType, out int size))
+            {
+                throw new Exception("Invalid ShipSize for ShipType.Destroyer");
+            }
+
+            Size = size;
+            ShipType = shipType;
         }
 
         public bool Hit(int row, int col)

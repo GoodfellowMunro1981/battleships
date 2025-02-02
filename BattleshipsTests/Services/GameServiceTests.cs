@@ -1,5 +1,6 @@
 ﻿using Battleships.Entities;
 using Battleships.Enums;
+using Battleships.Helpers;
 
 namespace Battleships.Services.Tests
 {
@@ -321,7 +322,8 @@ namespace Battleships.Services.Tests
         {
             // Arrange
             char[,] grid = GridService.InitializeGrid(gridRowCount, gridColCount);
-            List<Ship> ships = GridService.PlaceShips(grid, gridRowCount, gridColCount);
+            List<Ship> ships = GridService.AddShips([ShipType.Battleship, ShipType.Destroyer, ShipType.Destroyer]);
+            GridService.PlaceShips(grid, ships, gridRowCount, gridColCount);
             var results = new List<EventResult>();
 
             // Act
@@ -351,7 +353,10 @@ namespace Battleships.Services.Tests
             Ship battleship = new(ShipType.Battleship);
             ships.Add(battleship);
 
-            GridService.PlaceShip(grid, 2, 0, (int)ShipType.Battleship, true, battleship);
+            if (ShipSettings.ShipSizes.TryGetValue(ShipType.Battleship, out int battleshipSize))
+            {
+                GridService.PlaceShip(grid, 2, 0, battleshipSize, true, battleship);
+            }
         }
 
         private static void SetTestGridWitOneBattleShipTwoDestroyersAtFixedLocations(
@@ -367,9 +372,19 @@ namespace Battleships.Services.Tests
             Ship destroyer2 = new(ShipType.Destroyer);
             ships.Add(destroyer2);
 
-            GridService.PlaceShip(grid, 2, 0, (int)ShipType.Battleship, true, battleship);
-            GridService.PlaceShip(grid, 3, 0, (int)ShipType.Destroyer, true, destroyer1);
-            GridService.PlaceShip(grid, 4, 0, (int)ShipType.Destroyer, true, destroyer2);
+            if (!ShipSettings.ShipSizes.TryGetValue(ShipType.Battleship, out int battleshipSize))
+            {
+                throw new Exception("Invalid ShipSize for ShipType.Battleship");
+            }
+
+            if (!ShipSettings.ShipSizes.TryGetValue(ShipType.Destroyer, out int destroyerSize))
+            {
+                throw new Exception("Invalid ShipSize for ShipType.Destroyer");
+            }
+
+            GridService.PlaceShip(grid, 2, 0, battleshipSize, true, battleship);
+            GridService.PlaceShip(grid, 3, 0, destroyerSize, true, destroyer1);
+            GridService.PlaceShip(grid, 4, 0, destroyerSize, true, destroyer2);
         }
         #endregion
     }

@@ -1,30 +1,22 @@
 ﻿using Battleships.Entities;
+using Battleships.Enums;
 using Battleships.Helpers;
 using Battleships.Services;
 
 class BattleshipsGame
 {
-    /// <summary>
-    /// gridRowCount must have a minimum value of with a maximimum value of 26 for en-GB chars and square grid
-    /// </summary>
-    private const int gridRowCount = 10;
-
-    /// <summary>
-    /// gridColCount must have a minimum value of 1 with a maximimum value of 26 for en-GB chars and square grid
-    /// </summary>
-    private const int gridColCount = 10;
-
     static void Main()
     {
         try
         {
-            char[,] grid = GridService.InitializeGrid(gridRowCount, gridColCount);
-            List<Ship> ships = GridService.PlaceShips(grid, gridRowCount, gridColCount);
-            GameService.PlayGame(grid, ships, gridRowCount, gridColCount);
+            char[,] grid = GridService.InitializeGrid(GridSize.GridRowCount, GridSize.GridColCount);
+            List<Ship> ships = GridService.AddShips([ShipType.Battleship, ShipType.Destroyer, ShipType.Destroyer]);
+            GridService.PlaceShips(grid, ships, GridSize.GridRowCount, GridSize.GridColCount);
+            GameService.PlayGame(grid, ships, GridSize.GridRowCount, GridSize.GridColCount);
         }
         catch (Exception ex)
         {
-            //TODO ex should be logged in log file
+            //TODO ex should be logged in log file or database
             Console.Write(UserMessages.Error);
         }
     }
