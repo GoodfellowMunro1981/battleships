@@ -7,6 +7,6 @@
         RepeatInput = 2,
         Hit = 3,
         Miss = 4,
-        Sunk = 5
+        HitAndSunk = 5
     }
 }

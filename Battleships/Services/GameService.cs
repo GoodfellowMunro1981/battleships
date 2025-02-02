@@ -90,18 +90,20 @@ namespace Battleships.Services
                 return invalidResult;
             }
 
-            char rowValue = input[0];
-            char columnValue = input[1];
+            char rowValue = input.First();
+            string columnValue = input.Length == 2
+                ? input.Substring(1)
+                : input.Substring(input.Length - 2);
 
             int intValueA = 65; // Represents 'A' in ASCII
             int row = rowValue - intValueA;
 
-            if (row < 0 || row > gridRowCount)
+            if (row < 0 || row >= gridRowCount)
             {
                 return invalidResult;
             }
 
-            if (!int.TryParse(columnValue.ToString(), out int column))
+            if (!int.TryParse(columnValue, out int column))
             {
                 return invalidResult;
             }
@@ -109,7 +111,7 @@ namespace Battleships.Services
             // index is 0 based so move column value down one from human 1 based input
             column -= 1;
 
-            if (column < 0 || column > gridColCount)
+            if (column < 0 || column >= gridColCount)
             {
                 return invalidResult;
             }
@@ -151,7 +153,7 @@ namespace Battleships.Services
                     if (ship.IsSunk())
                     {
                         Console.WriteLine(UserMessages.ShipSunk);
-                        return EventResult.Sunk;
+                        return EventResult.HitAndSunk;
                     }
 
                     return EventResult.Hit;

@@ -5,7 +5,7 @@ using Battleships.Services;
 class BattleshipsGame
 {
     /// <summary>
-    /// gridRowCount must have a minimum value of with a maximimum value of 26 for en-GB chars
+    /// gridRowCount must have a minimum value of with a maximimum value of 26 for en-GB chars and square grid
     /// </summary>
     private const int gridRowCount = 10;
 
