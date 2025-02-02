@@ -5,3 +5,9 @@
 /.vs
 /Battleships/.vs/Battleships
 /Battleships/obj
+/Battleships/bin/Debug/net8.0/Battleships.pdb
+/Battleships/bin/Debug/net8.0/Battleships.exe
+/Battleships/bin/Debug/net8.0/Battleships.dll
+/Battleships/.vs/ProjectEvaluation/battleships.strings.v9.bin
+/Battleships/.vs/ProjectEvaluation/battleships.projects.v9.bin
+/Battleships/.vs/ProjectEvaluation/battleships.metadata.v9.bin
