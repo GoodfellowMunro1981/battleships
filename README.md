@@ -74,4 +74,10 @@ Setup tests as required/appropiate
 
 Tests
 	- unit tests for Logic
-	
+
+
+## Run Solution and test Cases
+
+open the solution using Visual Studio 2022 
+
+Battleships/Battleships.sln
